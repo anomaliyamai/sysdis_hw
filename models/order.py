@@ -1,0 +1,3 @@
+class Order:
+    id: int
+    
