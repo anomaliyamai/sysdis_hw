@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  database:
+    container_name: database
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: pgpass
+      POSTGRES_USER: pguser
+      POSTGRES_DB: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./resources/volumes/local/pgdata:/var/lib/postgresql/data
+    restart: always
+    network_mode: "bridge"
