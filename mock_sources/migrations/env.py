@@ -7,7 +7,7 @@ from sqlalchemy import pool
 from alembic import context
 from alembic.script import ScriptDirectory
 
-from mock_sources.metadata import metadata
+from metadata import metadata
 
 
 # this is the Alembic Config object, which provides
