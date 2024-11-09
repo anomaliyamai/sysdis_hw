@@ -1,0 +1,48 @@
+@startuml
+
+entity Order {
+    id: int
+    user_id: int
+    zone_id: int
+    base_coin_amount: float
+}
+
+entity Zone {
+    id: int
+    coin_coeff: float
+    display_name: str
+}
+
+entity Executor {
+    id: int
+    tags: list[str]
+    rating: float
+}
+
+entity TollRoads {
+    id: int
+    bonus_amount: float
+}
+
+entity AssignedOrder {
+    assign_order_id: int
+    order_id: int
+    executer_id: int
+    coin_coeff: float
+    coin_bonus_amount: float
+    final_coin_amount: float
+    route_information: str
+    assign_time: datetime
+    acquire_time: datetime
+}
+
+entity ConfigMap {
+}
+
+Order -- AssignedOrder
+Zone *-- Order
+Executor *-- Order
+Zone *-- AssignedOrder
+Executor *-- AssignedOrder
+
+@enduml

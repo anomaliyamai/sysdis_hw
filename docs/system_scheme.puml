@@ -1,0 +1,29 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/angular.puml
+!include DEVICONS/postgresql.puml
+!include DEVICONS/python.puml
+
+title
+    <b>Схема системы</b>
+end title
+
+Person(executor, "Исполнитель", "Исполнитель, просматривающий свои заказы")
+Person(assigner_system, "Назначитель заказов", "Система, назначающая заказы исполнителям")
+
+ContainerDb(mock_db, "MockDatabase", "PostgreSQL", $sprite="postgresql")
+ContainerDb(db, "Database", "PostgreSQL", $sprite="postgresql")
+Container(balancer, "Балансер", "service")
+Container(app, "Наш сервис", "python", $sprite="python")
+Container(mock_api, "Мок источников данных", "python", $sprite="python")
+
+Rel(executor, balancer, "Запрос своего заказа", "Rest")
+Rel(assigner_system, balancer, "Назначение заказа", "Rest")
+Rel(balancer, app, "Балансировка запросов")
+Rel(mock_api, mock_db, "Read/Write")
+Rel(app, db, "Read/Write")
+Rel_L(app, mock_api, "Запрос данных", "Rest")
+
+@enduml
