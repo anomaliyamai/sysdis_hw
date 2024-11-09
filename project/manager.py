@@ -1,5 +1,6 @@
 """Модуль утилит для подключения к БД Postgres."""
 from abc import ABC, abstractmethod
+import asyncio
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
@@ -47,7 +48,7 @@ class DBManager(ABC):
         cls._session_factory = async_sessionmaker(
             autocommit=False, autoflush=False, bind=cls._db_engine
         )
-        cls._scoped_session_factory = async_scoped_session(cls._session_factory)
+        cls._scoped_session_factory = async_scoped_session(cls._session_factory, asyncio.current_task)
         return cls._db_engine
 
     @classmethod
@@ -83,9 +84,15 @@ class DBManagerSettings(DBManager):
 
 
 @asynccontextmanager
-async def open_session(**kwargs) -> AsyncIterator[AsyncSession]:
-    """Открыть сессию к БД в виде контекстного менеджера."""
+async def open_session() -> AsyncIterator[AsyncSession]:
+    """Контекстный менеджер сессий."""
     factory = DBManagerSettings.get_scoped_session_factory()
-    session = factory(**kwargs)
+    session = factory()
     yield session
     await session.close()
+
+
+async def get_session() -> AsyncSession:
+    """Получить сессию."""
+    async with open_session() as session:
+        yield session

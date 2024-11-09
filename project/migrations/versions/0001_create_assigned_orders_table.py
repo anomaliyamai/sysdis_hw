@@ -27,7 +27,8 @@ def upgrade() -> None:
     sa.Column('final_coin_amount', sa.Float()),
     sa.Column('route_information', sa.String()),
     sa.Column('assign_time', sa.DateTime(timezone=True)),
-    sa.Column('acquire_time', sa.DateTime(timezone=True))
+    sa.Column('acquire_time', sa.DateTime(timezone=True)),
+    sa.PrimaryKeyConstraint('assign_order_id')
     )
     # ### end Alembic commands ###
 

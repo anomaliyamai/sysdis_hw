@@ -6,9 +6,9 @@ from metadata import DeclBase
 class AssignedOrder(DeclBase):
     """."""
 
-    __tablename__ = "assigned_orders"
+    __tablename__ = 'assigned_orders'
 
-    assign_order_id = sa.Column(sa.Integer)
+    assign_order_id = sa.Column(sa.Integer, primary_key=True)
     order_id = sa.Column(sa.Integer)
     executer_id = sa.Column(sa.Integer)
     coin_coeff = sa.Column(sa.Float)
