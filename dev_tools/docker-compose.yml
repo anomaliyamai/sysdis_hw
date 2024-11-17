@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  database:
+    container_name: database
+    image: yandex/clickhouse-server:22.1
+    environment:
+        CLICKHOUSE_DB: "db"
+        CLICKHOUSE_USER: "clickuser"
+        CLICKHOUSE_PASSWORD: "clickpass"
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+    volumes:
+      - ./resources/clickhouse:/var/lib/clickhouse
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    network_mode: "bridge"
