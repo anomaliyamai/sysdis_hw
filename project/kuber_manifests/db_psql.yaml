@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: psql-pgdata-pv
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: ~/db/local/pgdata
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: psql-pgdata-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: psql-db
+spec:
+  serviceName: psql-db-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psql-db
+  template:
+    metadata:
+      labels:	
+        app: psql-db
+    spec:
+      containers:
+      - name: psql-db
+        image: postgres:16
+        env:
+        - name: POSTGRES_USER
+          value: pguser
+        - name: POSTGRES_PASSWORD
+          value: pgpass
+        - name: POSTGRES_DB
+          value: db
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgresql-db-disk
+      volumes:
+      - name: pgdata
+        persistentVolumeClaim:
+          claimName: psql-pgdata-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: psql-db-service
+spec:
+  selector:
+    app: psql-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: NodePort

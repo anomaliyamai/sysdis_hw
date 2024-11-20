@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-params
+  labels:
+    app: my-app
+data:
+    HOST: "127.0.0.1"
+    PORT: "9000"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: app
+        name: app-container
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9000
+        env:
+          - name: HOST 
+            valueFrom:
+              configMapKeyRef:
+                name: env-params
+                key: HOST
+          - name: PORT 
+            valueFrom:
+              configMapKeyRef:
+                name: env-params
+                key: PORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  ports:
+  - port: 80
+    targetPort: 9000
+  selector:
+    app: my-app
