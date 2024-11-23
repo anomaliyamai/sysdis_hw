@@ -1,14 +1,8 @@
 import aiohttp
 import logging
 from typing import Optional
-
+from settings import settings
 from schemas import OrderData, ZoneData, Executor, ConfigMap, TollRoadsData
-
-order_http = 'http://localhost:3629/order-data'
-zone_http = 'http://localhost:3629/zone-data'
-executer_http = 'http://localhost:3629/executer-profile'
-config_http = 'http://localhost:3629/configs'
-toll_roads_http = 'http://localhost:3629/toll-roads'
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -31,7 +25,7 @@ class HttpClient:
 
     async def get_order_data(self, order_id: str) -> Optional[OrderData]:
         try:
-            async with self.session.get(order_http, params={'id': order_id}) as response:
+            async with self.session.get(settings.ORDER_URL, params={'id': order_id}) as response:
                 response.raise_for_status()
                 logger.debug(f"Ответ от сервера получен для заказа {order_id} с кодом: {response.status}")
                 data = await response.json()
@@ -48,7 +42,7 @@ class HttpClient:
                 return order_data
 
         except aiohttp.ClientError as e:
-            logger.error(f"Ошибка при запросе к {order_http}: {e}")
+            logger.error(f"Ошибка при запросе к {settings.ORDER_URL}: {e}")
         except aiohttp.ContentTypeError:
             logger.error(f"Ошибка: ответ от сервера не в формате JSON для order_id={order_id}")
         except Exception as e:
@@ -57,7 +51,7 @@ class HttpClient:
 
     async def get_zone_info(self, zone_id: str) -> Optional[ZoneData]:
         try:
-            async with self.session.get(zone_http, params={'id': zone_id}) as response:
+            async with self.session.get(settings.ZONE_URL, params={'id': zone_id}) as response:
                 response.raise_for_status()
                 logger.debug(f"Ответ от сервера получен для зоны {zone_id} с кодом: {response.status}")
                 data = await response.json()
@@ -72,7 +66,7 @@ class HttpClient:
                 return zone_data
 
         except aiohttp.ClientError as e:
-            logger.error(f"Ошибка при запросе к {zone_http}: {e}")
+            logger.error(f"Ошибка при запросе к {settings.ZONE_URL}: {e}")
         except aiohttp.ContentTypeError:
             logger.error(f"Ошибка: ответ от сервера не в формате JSON для zone_id={zone_id}")
         except Exception as e:
@@ -81,7 +75,7 @@ class HttpClient:
 
     async def get_toll_roads(self, zone_display_name: str) -> Optional[TollRoadsData]:
         try:
-            async with self.session.get(toll_roads_http, params={'zone_display_name': zone_display_name}) as response:
+            async with self.session.get(settings.TOLL_ROADS_URL, params={'zone_display_name': zone_display_name}) as response:
                 response.raise_for_status()
                 logger.debug(f"Ответ от сервера получен для зоны {zone_display_name} с кодом: {response.status}")
                 data = await response.json()
@@ -96,7 +90,7 @@ class HttpClient:
                 return toll_roads_data
 
         except aiohttp.ClientError as e:
-            logger.error(f"Ошибка при запросе к {toll_roads_http}: {e}")
+            logger.error(f"Ошибка при запросе к {settings.TOLL_ROADS_URL}: {e}")
         except aiohttp.ContentTypeError:
             logger.error(f"Ошибка: ответ от сервера не в формате JSON для зоны {zone_display_name}")
         except Exception as e:
@@ -105,14 +99,14 @@ class HttpClient:
 
     async def get_executor_profile(self, executor_id: str) -> Optional[Executor]:
         try:
-            async with self.session.get(executer_http, params={'id': executor_id}) as response:
+            async with self.session.get(settings.EXECUTOR_URL, params={'id': executor_id}) as response:
                 response.raise_for_status()
                 logger.debug(f"Ответ от сервера получен для исполнителя {executor_id} с кодом: {response.status}")
                 data = await response.json()
                 tags = data.get('tags')
                 rating = data.get('rating')
                 if tags is None or rating is None:
-                    logger.error(f"Ошибка: отсутствуют необходимые поля в ответе для executer_id={executor_id}")
+                    logger.error(f"Ошибка: отсутствуют необходимые поля в ответе для executor_id={executor_id}")
                     return None
 
                 executer_profile = Executor(id=executor_id, tags=tags, rating=rating)
@@ -120,16 +114,16 @@ class HttpClient:
                 return executer_profile
 
         except aiohttp.ClientError as e:
-            logger.error(f"Ошибка при запросе к {executer_http}: {e}")
+            logger.error(f"Ошибка при запросе к {settings.EXECUTOR_URL}: {e}")
         except aiohttp.ContentTypeError:
-            logger.error(f"Ошибка: ответ от сервера не в формате JSON для executer_id={executor_id}")
+            logger.error(f"Ошибка: ответ от сервера не в формате JSON для executor_id={executor_id}")
         except Exception as e:
-            logger.error(f"Неизвестная ошибка при получении данных для executer_id={executor_id}: {e}")
+            logger.error(f"Неизвестная ошибка при получении данных для executor_id={executor_id}: {e}")
         return None
 
     async def get_configs(self) -> Optional[ConfigMap]:
         try:
-            async with self.session.get(config_http) as response:
+            async with self.session.get(settings.CONFIG_URL) as response:
                 response.raise_for_status()
                 logger.debug(f"Ответ от сервера получен с кодом: {response.status}")
                 data = await response.json()
@@ -138,7 +132,7 @@ class HttpClient:
                 return config_map
 
         except aiohttp.ClientError as e:
-            logger.error(f"Ошибка при запросе к {config_http}: {e}")
+            logger.error(f"Ошибка при запросе к {settings.CONFIG_URL}: {e}")
         except aiohttp.ContentTypeError:
             logger.error(f"Ошибка: ответ от сервера не в формате JSON.")
         except Exception as e:
