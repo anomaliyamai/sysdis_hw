@@ -10,7 +10,7 @@ class AssignedOrder(DeclBase):
 
     assign_order_id = sa.Column(sa.Integer, primary_key=True)
     order_id = sa.Column(sa.Integer)
-    executer_id = sa.Column(sa.Integer)
+    executor_id = sa.Column(sa.Integer)
     coin_coeff = sa.Column(sa.Float)
     coin_bonus_amount = sa.Column(sa.Float)
     final_coin_amount = sa.Column(sa.Float)
