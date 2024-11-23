@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mock-pgdata-pv
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: ~/mock_db/local/pgdata
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mock-pgdata-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mock-db
+spec:
+  serviceName: mock-db-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock-db
+  template:
+    metadata:
+      labels:	
+        app: mock-db
+    spec:
+      containers:
+      - name: mock-db
+        image: postgres:16
+        env:
+        - name: POSTGRES_USER
+          value: pguser
+        - name: POSTGRES_PASSWORD
+          value: pgpass
+        - name: POSTGRES_DB
+          value: mock_db
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgresql-db-disk
+      volumes:
+      - name: pgdata
+        persistentVolumeClaim:
+          claimName: mock-pgdata-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mock-db-service
+spec:
+  selector:
+    app: mock-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: NodePort
