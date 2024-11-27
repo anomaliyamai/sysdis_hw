@@ -11,7 +11,9 @@ app = FastAPI(title='order_system', docs_url='/docs')
 async def on_startup():
     asyncio.create_task(settings.start_update_loop())
 
-app.include_router(api.get_order_router)
+app.include_router(api.assign_order_router)
+app.include_router(api.acquire_order_router)
+app.include_router(api.cancel_order_router)
 app.include_router(api.executor_router)
 app.include_router(api.order_router)
 app.include_router(api.tollroads_router)

@@ -5,16 +5,16 @@ from crud import AssignedOrderRepository
 from manager import get_session
 from models import AssignedOrder as AssignedOrderModel
 
-get_order_router = APIRouter(
-    prefix='/get-order',
+cancel_order_router = APIRouter(
+    prefix='/delete-order',
     tags=['Order']
 )
 
 
-@get_order_router.get('/{order_id}')
-async def get_order_data(order_id: int, session: AsyncSession = Depends(get_session)):
+@acquire_order_router.delete('/{order_id}')
+async def delete_data(order_id: int, session: AsyncSession = Depends(get_session)):
     db = AssignedOrderRepository(session)
-    result = await db.get_by_id(AssignedOrderModel(order_id=order_id))
-    if not result:
+    delete_status = await db.delete(AssignedOrderModel(order_id=order_id))
+    if not delete_status:
         return HTTPException(status_code=HTTPStatus.BAD_REQUEST)
-    return result
+    return delete_status
