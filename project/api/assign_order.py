@@ -18,10 +18,10 @@ assign_order_router = APIRouter(
 )
 
 
-@acquire_order_router.post('')
+@assign_order_router.post('')
 async def assign_data(identificators: Identificators, session: AsyncSession = Depends(get_session)):
     db = AssignedOrderRepository(session)
-    result = await db.create(
+    await db.create(
         AssignedOrderModel(order_id=identificators.order_id, executor_id=identificators.executor_id,
-                           assign_time=datetime.now()))
-    return result
+                           assign_time=datetime.utcnow()))
+    # enrich data from other handlers
