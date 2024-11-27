@@ -8,7 +8,7 @@ class AssignedOrder(DeclBase):
 
     __tablename__ = 'assigned_orders'
 
-    assign_order_id = sa.Column(sa.Integer, primary_key=True)
+    assign_order_id = sa.Column(sa.String, primary_key=True)
     order_id = sa.Column(sa.Integer)
     executor_id = sa.Column(sa.Integer)
     coin_coeff = sa.Column(sa.Float)

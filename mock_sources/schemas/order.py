@@ -12,4 +12,4 @@ class OrderCreate(BaseOrder):
 
 
 class Order(BaseOrder):
-    id: int
+    id: str

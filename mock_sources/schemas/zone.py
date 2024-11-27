@@ -11,4 +11,4 @@ class ZoneCreate(BaseZone):
 
 
 class Zone(BaseZone):
-    id: int
+    id: str

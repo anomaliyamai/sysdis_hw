@@ -10,4 +10,4 @@ class TollRoadsCreate(BaseTollRoads):
 
 
 class TollRoads(BaseTollRoads):
-    id: int
+    id: str

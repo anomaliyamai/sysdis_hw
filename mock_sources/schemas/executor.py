@@ -11,4 +11,4 @@ class ExecutorCreate(BaseExecutor):
 
 
 class Executor(BaseExecutor):
-    id: int
+    id: str

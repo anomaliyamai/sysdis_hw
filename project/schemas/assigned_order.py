@@ -19,4 +19,4 @@ class AssignedOrderCreate(BaseAssignedOrder):
 
 
 class AssignedOrder(BaseAssignedOrder):
-    assign_order_id: int
+    assign_order_id: str

@@ -14,7 +14,7 @@ Person(executor, "Исполнитель", "Исполнитель, просма
 Person(assigner_system, "Назначитель заказов", "Система, назначающая заказы исполнителям")
 
 ContainerDb(mock_db, "MockDatabase", "PostgreSQL", $sprite="postgresql")
-ContainerDb(db, "Database", "PostgreSQL", $sprite="postgresql")
+ContainerDb(db, "Database", "PostgreSQL")
 Container(balancer, "Балансер", "service")
 Container(app, "Наш сервис", "python", $sprite="python")
 Container(mock_api, "Мок источников данных", "python", $sprite="python")

@@ -44,5 +44,6 @@ Zone *-- Order
 Executor *-- Order
 Zone *-- AssignedOrder
 Executor *-- AssignedOrder
+TollRoads *-- AssignedOrder
 
 @enduml
