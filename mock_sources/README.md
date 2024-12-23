@@ -6,5 +6,5 @@ docker run --name mock_db -p 5433:5432 -v ./resources/volumes/local/pgdata:/var/
 
 #### Для alembic
 ```shell
-export POSTGRES_CONNECTION_STRING="postgresql://pguser:pgpass@localhost:5433/db"
+export POSTGRES_CONNECTION_STRING="postgresql://pguser:pgpass@localhost:5433/mock_db"
 ```
