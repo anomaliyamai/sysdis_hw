@@ -16,7 +16,9 @@ cancel_order_router = APIRouter(
 async def delete_data(order_id: str, session: AsyncSession = Depends(get_session)):
     db = AssignedOrderRepository(session)
     assigned_order = await db.get_by_id(order_id)
-    if assigned_order is None or assigned_order.acquire_time is not None or (
+    if assigned_order is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
+    if assigned_order.acquire_time is not None or (
             assigned_order.assign_time - datetime.utcnow().replace(tzinfo=timezone.utc)) > timedelta(minutes=10):
-        return HTTPException(status_code=HTTPStatus.BAD_REQUEST)
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="can't cancel the order due to service rules")
     return await db.delete(assigned_order)

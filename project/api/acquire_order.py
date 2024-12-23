@@ -17,6 +17,8 @@ acquire_order_router = APIRouter(
 async def acquire_data(executor_id: int, session: AsyncSession = Depends(get_session)):
     db = AssignedOrderRepository(session)
     res = await db.get_by_executor_id(executor_id)
+    if not res:
+        return HTTPException(status_code=HTTPStatus.NOT_FOUND)
     res.acquire_time = datetime.utcnow()
     result = await db.update(res)
     return result

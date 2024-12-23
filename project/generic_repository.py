@@ -11,7 +11,7 @@ class TableRepository(Generic[T]):
     def __init__(self, session: AsyncSession):
         self.session: AsyncSession = session
 
-    async def get_by_id(self, id_: int) -> T | None:
+    async def get_by_id(self, id_: str) -> T | None:
         return await self.session.get(self.type_, id_)
 
     async def create(self, entity: T) -> T:
