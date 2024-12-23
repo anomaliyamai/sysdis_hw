@@ -21,7 +21,7 @@ def upgrade() -> None:
     op.create_table('assigned_orders',
     sa.Column("assign_order_id", sa.String()),
     sa.Column('order_id', sa.Integer()),
-    sa.Column('executer_id', sa.Integer()),
+    sa.Column('executor_id', sa.Integer()),
     sa.Column('coin_coeff', sa.Float()),
     sa.Column('coin_bonus_amount', sa.Float()),
     sa.Column('final_coin_amount', sa.Float()),
