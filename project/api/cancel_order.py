@@ -19,7 +19,4 @@ async def delete_data(order_id: str, session: AsyncSession = Depends(get_session
     if assigned_order is None or assigned_order.acquire_time is not None or (
             assigned_order.assign_time - datetime.utcnow().replace(tzinfo=timezone.utc)) > timedelta(minutes=10):
         return HTTPException(status_code=HTTPStatus.BAD_REQUEST)
-    delete_status = await db.delete(assigned_order)
-    if not delete_status:
-        return HTTPException(status_code=HTTPStatus.BAD_REQUEST)
-    return delete_status
+    return await db.delete(assigned_order)
