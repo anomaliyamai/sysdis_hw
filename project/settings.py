@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
-    DB_CONNECTION_STRING_TOKEN: str = "postgresql+asyncpg://pguser:pgpass@localhost:5432/db"
+    DB_CONNECTION_STRING_TOKEN: str = "postgresql+asyncpg://pguser:pgpass@psql-db-service:5432/db"
     DB_ECHO: bool = False
     PORT: int = 9000
     HOST: str = "0.0.0.0"

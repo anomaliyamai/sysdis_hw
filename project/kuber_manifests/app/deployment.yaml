@@ -23,7 +23,7 @@ spec:
         app: my-app
     spec:
       containers:
-      - image: app
+      - image: app-container
         name: app-container
         imagePullPolicy: IfNotPresent
         ports:
@@ -39,6 +39,8 @@ spec:
               configMapKeyRef:
                 name: env-params
                 key: PORT
+          - name: POSTGRES_CONNECTION_STRING
+            value: "postgresql://pguser:pgpass@psql-db-service:5432/db" 
 ---
 apiVersion: v1
 kind: Service
@@ -46,7 +48,8 @@ metadata:
   name: app-service
 spec:
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 9000
   selector:
     app: my-app

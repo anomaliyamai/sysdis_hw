@@ -1,0 +1,7 @@
+FROM python:3.10
+LABEL authors="olegafanasev"
+COPY mock_sources/ /mock_sources/
+COPY mock_sources/requirements.txt .
+RUN pip install -r requirements.txt
+WORKDIR /mock_sources
+CMD ["alembic", "upgrade", "head"]
