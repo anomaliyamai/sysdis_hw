@@ -3,9 +3,9 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class BaseAssignedOrder(BaseModel):
-    order_id: int
-    executer_id: int
+class AssignedOrder(BaseModel):
+    order_id: str
+    executor_id: int
     coin_coeff: float
     coin_bonus_amount: float
     final_coin_amount: float
@@ -14,9 +14,9 @@ class BaseAssignedOrder(BaseModel):
     acquire_time: datetime
 
 
-class AssignedOrderCreate(BaseAssignedOrder):
+class AssignedOrderCreate(AssignedOrder):
     ...
 
 
-class AssignedOrder(BaseAssignedOrder):
-    assign_order_id: str
+# class AssignedOrder(BaseAssignedOrder):
+#     assign_order_id: str

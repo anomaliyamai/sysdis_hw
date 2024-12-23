@@ -5,7 +5,7 @@ from typing import List, Optional, Any, Dict
 
 import aiohttp
 from fastapi import FastAPI
-from fastapi.logger import logger as fastAPI_logger  # convenient name
+from fastapi.logger import logger as fastAPI_logger
 from fastapi.requests import Request
 from fastapi.responses import Response
 
@@ -69,12 +69,12 @@ async def endpoint() -> Any:
 async def endpoint_multi() -> Dict[str, int]:
     url = "http://localhost:8080/test"
 
-    async_calls: List[Coroutine[Any, Any, Any]] = list()  # store all async operations
+    async_calls: List[Coroutine[Any, Any, Any]] = list()
 
     async_calls.append(SingletonAiohttp.query_url(url))
     async_calls.append(SingletonAiohttp.query_url(url))
 
-    all_results: List[Dict[Any, Any]] = await asyncio.gather(*async_calls)  # wait for all async operations
+    all_results: List[Dict[Any, Any]] = await asyncio.gather(*async_calls)
     return {'success': sum([x['success'] for x in all_results])}
 
 

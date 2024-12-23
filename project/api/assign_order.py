@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from pydantic import BaseModel
 from fastapi import APIRouter, Depends
@@ -8,7 +9,7 @@ from models import AssignedOrder as AssignedOrderModel
 
 
 class Identificators(BaseModel):
-    order_id: int
+    order_id: str
     executor_id: int
 
 
@@ -23,5 +24,4 @@ async def assign_data(identificators: Identificators, session: AsyncSession = De
     db = AssignedOrderRepository(session)
     await db.create(
         AssignedOrderModel(order_id=identificators.order_id, executor_id=identificators.executor_id,
-                           assign_time=datetime.utcnow()))
-    # enrich data from other handlers
+                         assign_time=datetime.utcnow()))
