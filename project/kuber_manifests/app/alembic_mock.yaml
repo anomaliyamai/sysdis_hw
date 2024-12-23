@@ -1,17 +1,18 @@
+
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: alembic-upgrade
+  name: alembic-upgrade-mock
 spec:
   template:
     spec:
       containers:
       - name: alembic
-        image: migrations
+        image: alembic
         imagePullPolicy: IfNotPresent
         env:
           - name: POSTGRES_CONNECTION_STRING
-            value: "postgresql://pguser:pgpass@psql-db-service:5432/db"
+            value: "postgresql://pguser:pgpass@mock-db-service:5432/mock_db"
       restartPolicy: Never
   backoffLimit: 3
 
