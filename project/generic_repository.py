@@ -29,6 +29,6 @@ class TableRepository(Generic[T]):
 
     async def get_by_executor_id(self, executor_id: int) -> Optional[T]:
         result = await self.session.execute(
-            select(self.type_).filter(self.type_.executor_id == executor_id)
+            select(self.type_).filter(self.type_.executor_id == executor_id).limit(1)
         )
         return result.scalar_one_or_none()
